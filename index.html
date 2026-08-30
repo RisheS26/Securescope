@@ -71,9 +71,36 @@
     background:var(--ink); color:var(--paper);
     padding:9px 16px; border-radius:6px; text-decoration:none;
     border:1px solid var(--ink);
+    white-space:nowrap;
   }
   .nav-cta:hover{background:transparent; color:var(--ink);}
-  @media (max-width:760px){ .navlinks{display:none;} }
+  .nav-burger{
+    display:none; flex-direction:column; justify-content:center; gap:4px;
+    width:36px; height:36px; background:none; border:1px solid var(--paper-line);
+    border-radius:6px; cursor:pointer; padding:0;
+  }
+  .nav-burger span{width:16px; height:2px; background:var(--text-dark); margin:0 auto; transition:transform .2s, opacity .2s;}
+  .nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  .nav-mobile-panel{
+    display:none; flex-direction:column;
+    background:var(--paper); border-bottom:1px solid var(--paper-line);
+    padding:8px 28px 18px;
+  }
+  .nav-mobile-panel a{
+    padding:12px 0; text-decoration:none; color:var(--text-dark); font-size:15px;
+    border-bottom:1px solid var(--paper-line);
+  }
+  .nav-mobile-panel.open{display:flex;}
+  @media (max-width:760px){
+    .navlinks{display:none;}
+    .nav-burger{display:flex;}
+    .nav-cta{font-size:11.5px; padding:8px 11px;}
+  }
+  @media (max-width:400px){
+    .nav-cta{display:none;}
+  }
 
   /* ---------- HERO ---------- */
   header.hero{
@@ -93,6 +120,10 @@
   .hero-grid{
     display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
     position:relative; z-index:1;
+  }
+  @media (max-width:940px){
+    .hero-grid{grid-template-columns:1fr; gap:40px;}
+    header.hero{padding:48px 0 64px;}
   }
   .eyebrow{
     font-family:'JetBrains Mono',monospace;
@@ -293,12 +324,22 @@
 <nav>
   <div class="wrap">
     <div class="logo"><span class="dot"></span>SecureScope</div>
-    <div class="navlinks">
+    <div class="navlinks" id="navlinks">
       <a href="#how">How it works</a>
       <a href="#why-now">Why now</a>
-      <a href="#pricing">Pricing</a>
     </div>
-    <a class="nav-cta" href="#waitlist">$ get_early_access</a>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a class="nav-cta" href="#waitlist">$ get_early_access</a>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <a href="#how">How it works</a>
+    <a href="#why-now">Why now</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#waitlist" class="mono" style="font-weight:600; border-bottom:none;">$ get_early_access</a>
   </div>
 </nav>
 
@@ -394,40 +435,8 @@
 <section id="pricing">
   <div class="wrap">
     <div class="sec-label">Pricing</div>
-    <h2>Wedge in free. Pay only once it matters.</h2>
-    <p class="lede">Priced in India, sellable globally — undercutting every named competitor by a wide margin.</p>
-    <div class="price-grid">
-      <div class="price-card">
-        <h4>Free scan</h4>
-        <div class="amt">₹0</div>
-        <div class="usd">one-time</div>
-        <ul>
-          <li>Domain + repo + MCP config scan</li>
-          <li>Full findings summary</li>
-          <li>No card required</li>
-        </ul>
-      </div>
-      <div class="price-card core">
-        <h4>Core</h4>
-        <div class="amt">₹2,500–4,000<span style="font-size:14px;font-weight:500;">/mo</span></div>
-        <div class="usd">$30–48/mo</div>
-        <ul>
-          <li>Continuous monitoring</li>
-          <li>Scheduled re-scans</li>
-          <li>Instant alerts on new exposure</li>
-        </ul>
-      </div>
-      <div class="price-card">
-        <h4>DPDP + Security</h4>
-        <div class="amt">₹8,000–15,000<span style="font-size:14px;font-weight:500;">/mo</span></div>
-        <div class="usd">$95–180/mo</div>
-        <ul>
-          <li>Everything in Core</li>
-          <li>Consent &amp; notice gap-checks</li>
-          <li>India DPDP-readiness bundle</li>
-        </ul>
-      </div>
-    </div>
+    <h2>No price yet — because there's no product to price.</h2>
+    <p class="lede">The free scan stays free while this is being built. Pricing gets decided once there's something real to charge for — not before.</p>
   </div>
 </section>
 
@@ -449,13 +458,28 @@
 </section>
 
 <footer>
-  <div class="wrap">
-    <div>SecureScope · Chennai, Tamil Nadu, India</div>
-    <div><a href="#waitlist">Get early access</a></div>
+  <div class="wrap" style="flex-direction:column; align-items:flex-start; gap:14px;">
+    <div style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+      <div>SecureScope · Chennai, Tamil Nadu, India</div>
+      <div><a href="#waitlist">Get early access</a></div>
+    </div>
+    <div style="font-size:12px; opacity:0.7; border-top:1px solid var(--ink-line); padding-top:14px; width:100%;">Built solo by the founder of Breculia AI, an automation agency that served early-stage AI-native founders — this is that exact network and ICP, productized.</div>
   </div>
 </footer>
 
 <script>
+  // Mobile nav toggle
+  const burger = document.getElementById('navBurger');
+  const panel = document.getElementById('navMobilePanel');
+  burger.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    panel.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
+
   // Hero terminal type-in simulation
   const lines = [
     { text: '<span class="t-prompt">$</span> securescope scan n8n-workflows.acmeai.dev', cls: '' },
@@ -496,7 +520,7 @@
   }
 
   // Waitlist form — visual state only; wire WL_ENDPOINT to a real form backend before relying on it
-  const WL_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9LitfkjoZ4n8g3MYSO893wCUQqpCGdht7e74RO9LcNeqPN_oq0GoTR36I8qmMi3fRdA/exec"; // e.g. a Formspree endpoint: "https://formspree.io/f/yourFormId"
+  const WL_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9LitfkjoZ4n8g3MYSO893wCUQqpCGdht7e74RO9LcNeqPN_oq0GoTR36I8qmMi3fRdA/exec"; // paste your Google Apps Script /exec URL here
   document.getElementById('wl-form').addEventListener('submit', async function(e){
     e.preventDefault();
     const email = document.getElementById('wl-email').value;
@@ -509,7 +533,8 @@
     try {
       await fetch(WL_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ email })
       });
       status.textContent = "> done — you're on the list.";

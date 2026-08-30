@@ -496,7 +496,7 @@
   }
 
   // Waitlist form — visual state only; wire WL_ENDPOINT to a real form backend before relying on it
-  const WL_ENDPOINT = ""; // e.g. a Formspree endpoint: "https://formspree.io/f/yourFormId"
+  const WL_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9LitfkjoZ4n8g3MYSO893wCUQqpCGdht7e74RO9LcNeqPN_oq0GoTR36I8qmMi3fRdA/exec"; // e.g. a Formspree endpoint: "https://formspree.io/f/yourFormId"
   document.getElementById('wl-form').addEventListener('submit', async function(e){
     e.preventDefault();
     const email = document.getElementById('wl-email').value;
